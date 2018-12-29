@@ -162,40 +162,6 @@ type Package struct {
 	typesPkg *types.Package
 }
 
-// // parsePackageDir parses the package residing in the directory.
-// func (g *Generator) parsePackageDir(directory string) {
-// 	pkg, err := build.Default.ImportDir(directory, 0)
-// 	if err != nil {
-// 		log.Fatalf("cannot process directory %s: %s", directory, err)
-// 	}
-// 	var names []string
-// 	names = append(names, pkg.GoFiles...)
-// 	names = append(names, pkg.CgoFiles...)
-// 	// TODO: Need to think about constants in test files. Maybe write type_string_test.go
-// 	// in a separate pass? For later.
-// 	// names = append(names, pkg.TestGoFiles...) // These are also in the "foo" package.
-// 	names = append(names, pkg.SFiles...)
-// 	names = prefixDirectory(directory, names)
-// 	g.parsePackage(directory, names, nil)
-// }
-//
-// // parsePackageFiles parses the package occupying the named files.
-// func (g *Generator) parsePackageFiles(names []string) {
-// 	g.parsePackage(".", names, nil)
-// }
-
-// // prefixDirectory places the directory name on the beginning of each name in the list.
-// func prefixDirectory(directory string, names []string) []string {
-// 	if directory == "." {
-// 		return names
-// 	}
-// 	ret := make([]string, len(names))
-// 	for i, n := range names {
-// 		ret[i] = filepath.Join(directory, n)
-// 	}
-// 	return ret
-// }
-
 // parsePackage analyzes the single package constructed from the patterns and tags.
 // parsePackage exits if there is an error.
 func (g *Generator) parsePackage(patterns []string, tags []string) {
@@ -230,38 +196,6 @@ func (g *Generator) addPackage(pkg *packages.Package) {
 		}
 	}
 }
-
-// parsePackage analyzes the single package constructed from the named files.
-// If text is non-nil, it is a string to be used instead of the content of the file,
-// to be used for testing. parsePackage exits if there is an error.
-// func (g *Generator) parsePackagee(directory string, names []string, text interface{}) {
-// 	var files []*File
-// 	var astFiles []*ast.File
-// 	g.pkg = new(Package)
-// 	fs := token.NewFileSet()
-// 	for _, n := range names {
-// 		if !strings.HasSuffix(n, ".go") {
-// 			continue
-// 		}
-// 		parsedFile, err := parser.ParseFile(fs, n, text, 0)
-// 		if err != nil {
-// 			log.Fatalf("parsing package: %s: %s", n, err)
-// 		}
-// 		astFiles = append(astFiles, parsedFile)
-// 		files = append(files, &File{
-// 			file: parsedFile,
-// 			pkg:  g.pkg,
-// 		})
-// 	}
-// 	if len(astFiles) == 0 {
-// 		log.Fatalf("%s: no buildable Go files", directory)
-// 	}
-// 	g.pkg.name = astFiles[0].Name.Name
-// 	g.pkg.files = files
-// 	g.pkg.dir = directory
-// 	// Type check the package.
-// 	g.pkg.check(fs, astFiles)
-// }
 
 // check type-checks the package. The package must be OK to proceed.
 func (pkg *Package) check(fs *token.FileSet, astFiles []*ast.File) {
